@@ -1,0 +1,2 @@
+.\myqueue
+.\private$\anotherqueue
