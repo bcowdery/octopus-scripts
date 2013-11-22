@@ -3,14 +3,14 @@
 # system before deploying the executable from this octopus package.
 #
 # see http://particular.net/articles/the-nservicebus-host
-#	  http://particular.net/articles/profiles-for-nservicebus-host
+#     http://particular.net/articles/profiles-for-nservicebus-host
 #
 # These variables can be set via the Octopus web portal:
 #
-#   ServiceName         	- Name of the installed NServiceBus host windows service.
-#	ServiceEndpointDll		- Name of the DLL that configures this endpoint, used to apply app.config after transforms.
-#	ServiceBusProfile		- Name of the NServicBus host profile to use when running the service. If left blank, NServiceBus defaults to "NServiceBus.Production"
-#	InstallInfrastructure	- If True, runs the NServiceBus infrastructure installers before deployment (defaults to False)
+#   ServiceName           - Name of the installed NServiceBus host windows service.
+#   ServiceEndpointDll	  - Name of the DLL that configures this endpoint, used to apply app.config after transforms.
+#   ServiceBusProfile	  - Name of the NServicBus host profile to use when running the service. If left blank, NServiceBus defaults to "NServiceBus.Production"
+#   InstallInfrastructure - If True, runs the NServiceBus infrastructure installers before deployment (defaults to False)
 
 # defaults
 if (! $ServiceName) { $ServiceName = "My Endpoint Service" }

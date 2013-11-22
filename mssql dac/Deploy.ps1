@@ -7,12 +7,12 @@
 #
 # These variables can be set via the Octopus web portal:
 #
-# 	$SqlPackageFile			- Name of the included SQL data-tier application .dacpac file
-#	$ConnectionString		- Target connection string of the database to deploy to
-#   $SqlPackageExecutable	- Path to the command line SqlPackage.exe deployment utility
+#    $SqlPackageFile 		- Name of the included SQL data-tier application .dacpac file
+#    $ConnectionString		- Target connection string of the database to deploy to
+#    $SqlPackageExecutable	- Path to the command line SqlPackage.exe deployment utility
 #
 # SQLCMD Varaibles that can be set via the Octopus web portal:
-#	$MyCmdVar	- Sets the $(MyCmdVar) SQLCMD var
+#    $MyCmdVar 	- Sets the $(MyCmdVar) SQLCMD var
 
 
 $ScriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path 
