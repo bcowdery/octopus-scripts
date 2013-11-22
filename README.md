@@ -63,6 +63,9 @@ for Visual Studio.
 
 
 
+# License
 
+Copyright (c) 2013 Brian Cowdery
+Licensed under the MIT license.
 
 
