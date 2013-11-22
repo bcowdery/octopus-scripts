@@ -7,36 +7,56 @@
 #
 # These variables can be set via the Octopus web portal:
 #
-#   ServiceName         - Name of the installed NServiceBus host windows service.
-#	ServiceBusProfile	- Name of the NServicBus host profile to use when running the service.
-#                         If left blank, NServiceBus defaults to "NServiceBus.Production"
+#   ServiceName         	- Name of the installed NServiceBus host windows service.
+#	ServiceEndpointDll		- Name of the DLL that configures this endpoint, used to apply app.config after transforms.
+#	ServiceBusProfile		- Name of the NServicBus host profile to use when running the service. If left blank, NServiceBus defaults to "NServiceBus.Production"
+#	InstallInfrastructure	- If True, runs the NServiceBus infrastructure installers before deployment (defaults to False)
 
 # defaults
 if (! $ServiceName) { $ServiceName = "My Endpoint Service" }
+if (! $ServiceEndpointDll) { $ServiceEndpointDll = "My.Endpoint.Service.dll" }
+$InstallInfrastructure = [System.Convert]::ToBoolean($InstallInfrastructure);
 
 
-# try and install / update the service by name
-$service = Get-Service $ServiceName -ErrorAction SilentlyContinue
-
+# install / update by service name
 $fullPath = Resolve-Path "NServiceBus.Host.exe"
 
-if ($service)
+$service = Get-Service $ServiceName -ErrorAction SilentlyContinue
+
+if ($service) 
 {
 	Write-Host "The existing service will be stopped and removed"
-
+	
 	Stop-Service $ServiceName -Force
 	& "$fullPath" /uninstall /serviceName:"$ServiceName" | Write-Host
 }
 
+if ($InstallInfrastructure) 
+{
+	Write-Host "Installing NServiceBus infrastructure (RavenDB, MSMQ etc.)"
+	& "$fullPath" /installInfrastructure $ServiceBusProfile | Write-Host	
+}
 
-# rename the transformed "app.config" to "MyService.exe.config" as this is not handled automatically
-# by octopus unless your transforms match the service exe config name ("MyService.<Environment>.exe.config")
+Write-Host "The service will be installed"       	
+& "$fullPath" /install /serviceName:"$ServiceName" $ServiceBusProfile | Write-Host
+
 Write-Host "Copying transformed $OctopusEnvironmentName configuration file"
+Rename-Item "$ServiceEndpointDll.config" "$ServiceEndpointDll.config.original"
+Copy-Item "app.config" -Destination "$ServiceEndpointDll.config"
 
-Rename-Item "$ServiceExecutable.config" "$ServiceExecutable.config.original"
-Copy-Item "app.config" -Destination "$ServiceExecutable.config"
 
+# Try and start the service by name
+# Fail the deployment if ther are any errors
 
-# start !
-Write-Host "Starting the service"
-Start-Service $ServiceName
+$ErrorActionPreference = "Stop"
+try 
+{
+    Write-Host "Starting the service"
+    Start-Service $ServiceName
+}
+catch 
+{
+    Write-Host "$($_.Exception.Message)"  -ForegroundColor Red
+    Write-Host "$($_.InvocationInfo.PositionMessage)" -ForegroundColor Red
+    exit 1
+}
