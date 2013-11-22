@@ -26,7 +26,7 @@ DTC before installing the service (NServiceBus 3.x only!).
 
 ## TopShelf Deploy
 
-<code>nservicebus\Deploy.psq</code>
+<code>nservicebus\Deploy.ps1</code>
 
 Installs a TopShelf service using the default HostFactory definition (generally in Program.cs).
 the service with the same name already exists it will be stopped and reconfigured to use
@@ -35,7 +35,7 @@ the service executable from this deployed octopus package.
 
 ## MSMQ Pre-Deploy
 
-<code>msmq\PreDeploy.psq</code>
+<code>msmq\PreDeploy.ps1</code>
 
 Pre deployment script that creates the required message queues (MSMQ). This script accepts
 either a list of queue names, or the name of a file containing the queues to create.
@@ -46,6 +46,8 @@ and public TCP queues for production.
 
 
 ## SQL Database DAC Deploy
+
+<code>mssql dac\Deploy.ps1</code>
 
 Publishes a data-tier application (DAC) from a compiled DAC package to an existing 
 SQL Database, Incrementally updating the database schema to match the source .dacpac
