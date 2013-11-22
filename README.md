@@ -10,7 +10,6 @@ Powershell scripts:
 * Deploying and installing standard .exe executables as windows services
 * Creating Microsoft Message Queues (MSMQ) 
 * Deploying SQL Databases from Data-tier Application (DAC) files
-* 
 
 
 ## NServiceBus Deploy
@@ -66,6 +65,7 @@ for Visual Studio.
 # License
 
 Copyright (c) 2013 Brian Cowdery
+
 Licensed under the MIT license.
 
 
