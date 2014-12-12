@@ -43,6 +43,5 @@ if(Test-Path "app.config")
 	Copy-Item "app.config" -Destination "$ServiceExecutable.config"
 }
 
-# start !
 Write-Host "Starting the service"
-& "$fullPath" "start" | Write-Host
+Start-Service $ServiceName
