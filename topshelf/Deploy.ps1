@@ -29,7 +29,7 @@ else
 {
     Write-Host "The service will be stopped and reconfigured"
 
-	& "$fullPath" "stop" | Write-Host
+	Stop-Service $ServiceName
     & "sc.exe" config $service.Name binPath= $fullPath start= auto | Write-Host
 }
 
