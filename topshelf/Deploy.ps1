@@ -23,25 +23,25 @@ if (! $service)
 {
     Write-Host "The service will be installed"
 
-	& "$fullPath" "install" | Write-Host
+	& "$fullPath" install --servicename:$ServiceName | Write-Host
 }
 else
 {
     Write-Host "The service will be stopped and reconfigured"
 
-	& "$fullPath" "stop" | Write-Host
+	Stop-Service $ServiceName
     & "sc.exe" config $service.Name binPath= $fullPath start= auto | Write-Host
 }
 
+if(Test-Path "app.config")
+{
+	# rename the transformed "app.config" to "MyService.exe.config" as this is not handled automatically
+	# by octopus unless your transforms match the service exe config name ("MyService.<Environment>.exe.config")
+	Write-Host "Copying transformed $OctopusEnvironmentName configuration file"
 
-# rename the transformed "app.config" to "MyService.exe.config" as this is not handled automatically
-# by octopus unless your transforms match the service exe config name ("MyService.<Environment>.exe.config")
-Write-Host "Copying transformed $OctopusEnvironmentName configuration file"
+	Rename-Item "$ServiceExecutable.config" "$ServiceExecutable.config.original"
+	Copy-Item "app.config" -Destination "$ServiceExecutable.config"
+}
 
-Rename-Item "$ServiceExecutable.config" "$ServiceExecutable.config.original"
-Copy-Item "app.config" -Destination "$ServiceExecutable.config"
-
-
-# start !
 Write-Host "Starting the service"
-& "$fullPath" "start" | Write-Host
+Start-Service $ServiceName
